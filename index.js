@@ -1,23 +1,27 @@
 module.exports = function (a, b, opts) {
   if (!opts) opts = {}
-  if (!opts.cmp) opts.cmp = defaultCmp
+  var cmp = opts.cmp || defaultCmp
 
-  if (Array.isArray(opts.cmp)) {
+  if (Array.isArray(cmp)) {
     for (var i = 0; i < a.length; i++) {
-      if (!overlapping(opts.cmp[i], a[i], b[i])) return false
+      if (!overlapping(cmp[i], a[i], b[i])) return false
     }
   } else {
     for (var i = 0; i < a.length; i++) {
-      if (!overlapping(opts.cmp, a[i], b[i])) return false
+      if (!overlapping(cmp, a[i], b[i])) return false
     }
   }
   return true
 }
 
 function overlapping (cmp, a, b) {
-  return (gte(cmp(a[0], b[0])) && lte(cmp(a[0], b[1])))
-    || (gte(cmp(a[1], b[0])) && lte(cmp(a[1], b[1])))
-    || (lt(cmp(a[0], b[0])) && gt(cmp((a[1], b[1]))))
+  var a0b0 = cmp(a[0], b[0])
+  var a0b1 = cmp(a[0], b[1])
+  if (gte(a0b0) && lte(a0b1)) return true
+  var a1b0 = cmp(a[1], b[0])
+  var a1b1 = cmp(a[1], b[1])
+  if (gte(a1b0) && lte(a1b1)) return true
+  return lt(a0b0) && gt(a1b1)
 }
 
 function gte (n) { return n >= 0 }
