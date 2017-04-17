@@ -20,7 +20,7 @@
     "region"
   ],
   "author": "substack",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "tape": "^4.4.0"
   },
